@@ -5,21 +5,37 @@ template <typename T> using Vec3 = std::tuple<T, T, T>;
 
 using Color = Vec3<uint8_t>;
 
-using Position = Vec3<float>;
+using FPType = float;
 
-void resize(Position &pos, float size) {
-  auto &[x, y, z] = pos;
-  float sum = x * x + y * y + z * z;
-  x *= size / sum;
-  y *= size / sum;
-  z *= size / sum;
-}
-
-float dot(const Position &a, const Position &b) {
-  auto [ax, ay, az] = a;
-  auto [bx, by, bz] = b;
-  return ax * bx + ay * by + az * bz;
-}
+class Position
+{
+  public:
+  Position(FPType x, FPType y, FPType z) : m_x(x), m_y(y), m_z(z){}
+  FPType dot(const Position & other) const
+  {
+    auto [x, y, z] = other;
+    return x * m_x + y * m_y + z * m_z;
+  }
+  void resize(FPType size)
+  {
+    auto sum = m_x * m_x + m_y * m_y + m_z * m_z;
+    m_x *= size/sum;
+    m_y *= size/sum;
+    m_z *= size/sum;
+  }
+  Position operator-(const Position & other) const
+  {
+    auto [x, y, z] = other;
+    return Position(m_x - x, m_y - y, m_z - z);
+  }
+  auto x() const { return m_x; }
+  auto y() const { return m_y; }
+  auto z() const { return m_z; }
+  private:
+  FPType m_x;
+  FPType m_y;
+  FPType m_z;
+};
 
 class Screen {
 public:
@@ -29,7 +45,7 @@ public:
   size_t height() const { return m_height; }
   size_t pixels() const { return m_width * m_height; }
   Color &operator[](size_t idx) { return m_raster[idx]; }
-  void save() {
+  void save() const {
     std::cout << "P3"
               << "\n";
     std::cout << m_width << " " << m_height << "\n";
@@ -52,18 +68,41 @@ private:
   std::vector<Color> m_raster;
 };
 
-Color raycast([[maybe_unused]] size_t x, [[maybe_unused]] size_t y,
-              [[maybe_unused]] const Screen &screen) {
-  float dx = x - static_cast<float>(screen.width()) / 2;
-  float dy = y - static_cast<float>(screen.height()) / 2;
-  float dz = 0;
-  Position dir(dx, dy, dz);
-  resize(dir, 1);
+Color cast(
+  [[maybe_unused]] const Position & cam,
+  [[maybe_unused]] const Position & dir)
+{
+  auto dp = dir.dot(Position(0, 0, 1));
+  if (dp < 0) return Color(0, 0, 255);
+  
+  ssize_t x, y;
+  if (dir.z() > 0 || dir.z() < 0)
+  {
+    auto t = cam.z() / dir.z();
+    x = static_cast<ssize_t>(cam.x() + dir.x() * t);
+    y = static_cast<ssize_t>(cam.y() + dir.y() * t);
+  }
+  else
+  {
+    x = cam.x();
+    y = cam.y();
+  }
 
-  float dp = dot(dir, Position(0, 1, 0));
-  if (dp < 0)
-    return Color(0, 0, 255);
-  return Color(255, 0, 0);
+  ssize_t xm = x & 1;
+  ssize_t ym = y & 1;
+
+  if (xm == ym) return Color(255, 255, 255);
+  return Color(0, 0, 0);
+}
+
+Color raycast(size_t x, size_t z, const Screen &screen) {
+  auto dx = x - static_cast<FPType>(screen.width()) / 2;
+  auto dy = static_cast<FPType>(100);
+  auto dz = z - static_cast<FPType>(screen.height()) / 2;
+  Position dir(dx, dy, dz);
+  dir.resize(1);
+
+  return cast(Position(0, 0, 5), dir);
 }
 
 static int ddd_main(void) {
