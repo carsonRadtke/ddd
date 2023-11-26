@@ -1,69 +1,13 @@
-#include <cstdint>
 #include <iostream>
 #include <memory>
 #include <variant>
 
-template <typename T> using Vec3 = std::tuple<T, T, T>;
-using Color = Vec3<uint8_t>;
-using FPType = float;
-
-class Position {
-public:
-  Position(FPType x, FPType y, FPType z) : m_x(x), m_y(y), m_z(z) {}
-  FPType dot(const Position &other) const {
-    auto [x, y, z] = other;
-    return x * m_x + y * m_y + z * m_z;
-  }
-  void resize(FPType size) {
-    auto sum = m_x * m_x + m_y * m_y + m_z * m_z;
-    m_x *= size / sum;
-    m_y *= size / sum;
-    m_z *= size / sum;
-  }
-  Position operator-(const Position &other) const {
-    auto [x, y, z] = other;
-    return Position(m_x - x, m_y - y, m_z - z);
-  }
-  auto x() const { return m_x; }
-  auto y() const { return m_y; }
-  auto z() const { return m_z; }
-
-private:
-  FPType m_x;
-  FPType m_y;
-  FPType m_z;
-};
-
-class Screen {
-public:
-  Screen(size_t width, size_t height)
-      : m_width(width), m_height(height), m_raster(width * height) {}
-  size_t width() const { return m_width; }
-  size_t height() const { return m_height; }
-  size_t pixels() const { return m_width * m_height; }
-  Color &operator[](size_t idx) { return m_raster[idx]; }
-  void save() const {
-    std::cout << "P3"
-              << "\n";
-    std::cout << m_width << " " << m_height << "\n";
-    std::cout << UINT8_MAX << "\n";
-    int counter = 0;
-    for (const auto &c : m_raster) {
-      auto [r, g, b] = c;
-      std::cout << static_cast<int>(r) << " " << static_cast<int>(g) << " "
-                << static_cast<int>(b) << "\t";
-      counter++;
-      counter %= m_width;
-      if (!counter)
-        std::cout << "\n";
-    }
-  }
-
-private:
-  size_t m_width;
-  size_t m_height;
-  std::vector<Color> m_raster;
-};
+#include "types.hpp"
+#include "position.hpp"
+#include "screen.hpp"
+#include "entity.hpp"
+#include "sphere.hpp"
+#include "box.hpp"
 
 Color cast_nocollision(const Position &cam, const Position &dir) {
   auto dp = dir.dot(Position(0, 0, 1));
@@ -87,55 +31,6 @@ Color cast_nocollision(const Position &cam, const Position &dir) {
     return Color(255, 255, 255);
   return Color(0, 0, 0);
 }
-
-class Entity {
-public:
-  Entity(Color color, FPType x, FPType y, FPType z)
-      : m_color(color), m_x(x), m_y(y), m_z(z) {}
-  virtual ~Entity() {}
-  virtual bool collides(const Position &cam, const Position &dir) const = 0;
-  Color color() const { return m_color; };
-  auto x() const { return m_x; }
-  auto y() const { return m_y; }
-  auto z() const { return m_z; }
-
-private:
-  Color m_color;
-  FPType m_x;
-  FPType m_y;
-  FPType m_z;
-};
-using EntityUPtr = std::unique_ptr<Entity>;
-
-struct Sphere : Entity {
-  Sphere(Color c, FPType x, FPType y, FPType z, FPType r)
-      : Entity(c, x, y, z), m_r(r) {}
-  bool collides([[maybe_unused]] const Position &cam,
-                [[maybe_unused]] const Position &dir) const {
-    return false;
-  }
-  auto radius() const { return m_r; }
-
-private:
-  FPType m_r;
-};
-
-struct Box : Entity {
-  Box(Color c, FPType x, FPType y, FPType z, FPType b, FPType w, FPType h)
-      : Entity(c, x, y, z), m_b(b), m_w(w), m_h(h) {}
-  bool collides([[maybe_unused]] const Position &cam,
-                [[maybe_unused]] const Position &dir) const {
-    return false;
-  }
-  auto base() const { return m_b; }
-  auto width() const { return m_w; }
-  auto height() const { return m_h; }
-
-private:
-  FPType m_b;
-  FPType m_w;
-  FPType m_h;
-};
 
 Color cast(const std::vector<EntityUPtr> &entities, const Position &cam,
            const Position &dir) {

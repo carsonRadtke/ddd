@@ -1,5 +1,5 @@
 CXX=clang++
-CXX_FLAGS=-std=c++20 -Werror -Wall -Wextra -fsanitize=undefined
+CXX_FLAGS=-std=c++20 -Werror -Wall -Wextra -fsanitize=undefined -Iddd/inc
 
 .PHONY: all
 all:

@@ -2,3 +2,4 @@
 -Werror
 -Wall
 -Wextra
+-Iddd/inc
