@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include "entity.hpp"
 #include "types.hpp"
 
 class Screen {
@@ -12,6 +13,7 @@ public:
   size_t width() const;
   size_t height() const;
   size_t pixels() const;
+  void render(const std::vector<EntityUPtr> &entities);
 
 private:
   size_t m_width;
