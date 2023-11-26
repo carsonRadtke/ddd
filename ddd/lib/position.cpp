@@ -1,6 +1,8 @@
 #include "position.hpp"
 #include "types.hpp"
+#include <assert.h>
 #include <cmath>
+#include <iostream>
 
 Position::Position( FPType x, FPType y, FPType z )
     : m_x( x ), m_y( y ), m_z( z )
@@ -20,10 +22,13 @@ FPType Position::dot( const Position &other ) const
 
 void Position::resize( FPType size )
 {
-  auto sum = m_x * m_x + m_y * m_y + m_z * m_z;
-  m_x *= size / sum;
-  m_y *= size / sum;
-  m_z *= size / sum;
+  auto M = magnitude();
+  auto sqSize = std::sqrt( size );
+  auto [ x, y, z ] = *this;
+  m_x = sqSize * x / M;
+  m_y = sqSize * y / M;
+  m_z = sqSize * z / M;
+  assert( std::fabs( std::pow( magnitude(), 2 ) - size ) < 0.001 );
 }
 
 Position Position::operator-( const Position &other ) const
