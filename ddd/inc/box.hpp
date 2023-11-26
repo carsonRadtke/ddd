@@ -1,18 +1,15 @@
 #pragma once
 
-#include "types.hpp"
 #include "entity.hpp"
+#include "types.hpp"
 
 struct Box : Entity {
-  Box(Color c, FPType x, FPType y, FPType z, FPType b, FPType w, FPType h)
-      : Entity(c, x, y, z), m_b(b), m_w(w), m_h(h) {}
+  Box(Color c, FPType x, FPType y, FPType z, FPType b, FPType w, FPType h);
   bool collides([[maybe_unused]] const Position &cam,
-                [[maybe_unused]] const Position &dir) const {
-    return false;
-  }
-  auto base() const { return m_b; }
-  auto width() const { return m_w; }
-  auto height() const { return m_h; }
+                [[maybe_unused]] const Position &dir) const;
+  FPType base() const;
+  FPType width() const;
+  FPType height() const;
 
 private:
   FPType m_b;

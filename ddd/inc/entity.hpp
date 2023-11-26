@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include "types.hpp"
 #include "position.hpp"
+#include "types.hpp"
 
 class Entity {
 public:
@@ -12,9 +12,9 @@ public:
   virtual ~Entity() {}
   virtual bool collides(const Position &cam, const Position &dir) const = 0;
   Color color() const { return m_color; };
-  auto x() const { return m_x; }
-  auto y() const { return m_y; }
-  auto z() const { return m_z; }
+  FPType x() const { return m_x; }
+  FPType y() const { return m_y; }
+  FPType z() const { return m_z; }
 
 private:
   Color m_color;

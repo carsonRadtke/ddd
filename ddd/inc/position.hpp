@@ -4,24 +4,13 @@
 
 class Position {
 public:
-  Position(FPType x, FPType y, FPType z) : m_x(x), m_y(y), m_z(z) {}
-  FPType dot(const Position &other) const {
-    auto [x, y, z] = other;
-    return x * m_x + y * m_y + z * m_z;
-  }
-  void resize(FPType size) {
-    auto sum = m_x * m_x + m_y * m_y + m_z * m_z;
-    m_x *= size / sum;
-    m_y *= size / sum;
-    m_z *= size / sum;
-  }
-  Position operator-(const Position &other) const {
-    auto [x, y, z] = other;
-    return Position(m_x - x, m_y - y, m_z - z);
-  }
-  auto x() const { return m_x; }
-  auto y() const { return m_y; }
-  auto z() const { return m_z; }
+  Position(FPType x, FPType y, FPType z);
+  Position operator-(const Position &other) const;
+  void resize(FPType size);
+  FPType dot(const Position &other) const;
+  FPType x() const;
+  FPType y() const;
+  FPType z() const;
 
 private:
   FPType m_x;
