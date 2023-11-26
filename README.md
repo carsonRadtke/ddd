@@ -20,3 +20,4 @@ Will render the scene to a ppm file. Then you can open the file.
  - [ ] ray caster -> ray tracer for finer images
  - [ ] configuration files so scene can be changed without recompiling
  - [ ] different image output formats for more portability
+ - [ ] more object types including meshes
