@@ -22,8 +22,7 @@ $(BINARY): $(OBJ_FILES)
 
 .PHONY: format
 format:
-	find . -name '*.hpp' | xargs clang-format -i
-	find . -name '*.cpp' | xargs clang-format -i
+	find . -name '*.[hc]pp' | xargs clang-format -style=file -i
 
 .PHONY: clean
 clean:

@@ -7,10 +7,12 @@
 
 class Entity {
 public:
-  Entity(Color color, FPType x, FPType y, FPType z)
-      : m_color(color), m_x(x), m_y(y), m_z(z) {}
+  Entity( Color color, FPType x, FPType y, FPType z )
+      : m_color( color ), m_x( x ), m_y( y ), m_z( z )
+  {
+  }
   virtual ~Entity() {}
-  virtual bool collides(const Position &cam, const Position &dir) const = 0;
+  virtual bool collides( const Position &cam, const Position &dir ) const = 0;
   Color color() const { return m_color; };
   FPType x() const { return m_x; }
   FPType y() const { return m_y; }

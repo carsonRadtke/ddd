@@ -10,19 +10,20 @@
 #include "sphere.hpp"
 #include "types.hpp"
 
-static int ddd_main() {
-  Screen screen(800, 600);
-
-  auto sph = std::make_unique<Sphere>(Sphere(Color(255, 0, 0), 10, 10, 10, 3));
+static int ddd_main()
+{
+  auto sph =
+      std::make_unique<Sphere>( Sphere( Color( 255, 0, 0 ), 0, 100, 0, 100 ) );
   std::vector<EntityUPtr> entities{};
-  entities.push_back(std::move(sph));
+  entities.push_back( std::move( sph ) );
 
-  screen.render(entities);
-  screen.save();
+  Screen screen( 800, 600 );
+  screen.render( entities );
 
   return 0;
 }
 
-int main([[maybe_unused]] int argc, [[maybe_unused]] const char *argv[]) {
+int main( [[maybe_unused]] int argc, [[maybe_unused]] const char *argv[] )
+{
   return ddd_main();
 }
