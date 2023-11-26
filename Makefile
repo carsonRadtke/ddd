@@ -9,4 +9,4 @@ all:
 
 .PHONY: format
 format:
-	clang-format ddd/program.cpp
+	clang-format -i ddd/program.cpp
