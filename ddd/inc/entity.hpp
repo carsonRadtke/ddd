@@ -4,6 +4,7 @@
 
 #include "position.hpp"
 #include "types.hpp"
+#include "color.hpp"
 
 class Entity {
 public:

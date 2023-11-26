@@ -25,7 +25,7 @@ void Screen::save() const
   std::cout << UINT8_MAX << "\n";
   int counter = 0;
   for ( const auto &c : m_raster ) {
-    auto [ r, g, b ] = c;
+    auto [ r, g, b ] = c.as_tuple();
     std::cout << static_cast<int>( r ) << " " << static_cast<int>( g ) << " "
               << static_cast<int>( b ) << "\t";
     counter++;

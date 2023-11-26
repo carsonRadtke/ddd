@@ -1,5 +1,6 @@
 #include "caster.hpp"
 #include "types.hpp"
+#include "color.hpp"
 
 static Color s_cast_nocollision( [[maybe_unused]] const Position &cam,
                                  const Position &dir )
@@ -16,10 +17,6 @@ static Color s_cast_nocollision( [[maybe_unused]] const Position &cam,
   auto my = std::abs( static_cast<ssize_t>( y ) ) % 100 < 50;
 
   if ( mx == my ) {
-    if ( std::abs( x - 0 ) < 50 )
-      return Color( 0, 255, 255 );
-    if ( std::abs( y - 500 ) < 50 )
-      return Color( 255, 0, 255 );
     return Color( 255, 255, 255 );
   }
 
@@ -27,11 +24,15 @@ static Color s_cast_nocollision( [[maybe_unused]] const Position &cam,
 }
 
 static Color s_cast( const std::vector<EntityUPtr> &entities,
-                     const Position &cam, const Position &dir )
+                     const Position &cam, const Position &dir,
+                     size_t bounces )
 {
   for ( const auto &e : entities ) {
-    if ( e->collides( cam, dir ) ) {
-      return e->color();
+    if ( e->collides( cam, dir ) )
+    {
+      Color entityColor = e->color();
+      if (bounces == 0) return entityColor;
+      return entityColor * 0.9;
     }
   }
   return s_cast_nocollision( cam, dir );
@@ -50,6 +51,6 @@ Color raycast( const std::vector<EntityUPtr> &entities, size_t x, size_t z,
   Position dir( dx, dy, dz );
   dir.resize( 1 );
 
-  return s_cast( entities, Position( 0, 0, hf / 2 ), dir );
+  return s_cast( entities, Position( 0, 0, hf / 2 ), dir, 1 );
 }
 } // namespace Caster

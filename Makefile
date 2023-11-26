@@ -6,6 +6,7 @@ CXX_SRCS=ddd/lib/box.cpp       \
 				 ddd/lib/position.cpp  \
 				 ddd/lib/screen.cpp    \
 				 ddd/lib/sphere.cpp    \
+				 ddd/lib/color.cpp     \
 				 ddd/program.cpp
 
 OBJ_FILES=$(patsubst %.cpp,%.o,$(CXX_SRCS))
