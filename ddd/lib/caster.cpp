@@ -1,27 +1,24 @@
 #include "caster.hpp"
+#include "types.hpp"
 
-static Color s_cast_nocollision( const Position &cam, const Position &dir )
+static Color s_cast_nocollision( [[maybe_unused]] const Position &cam, const Position &dir )
 {
   auto dp = dir.dot( Position( 0, 0, 1 ) );
-  if ( dp < 0 )
+  if ( dp <= 0 )
     return Color( 0, 0, 255 );
 
-  ssize_t x, y;
-  if ( dir.z() > 0 || dir.z() < 0 ) {
-    auto t = cam.z() / dir.z();
-    x = static_cast<ssize_t>( cam.x() + dir.x() * t );
-    y = static_cast<ssize_t>( cam.y() + dir.y() * t );
-  }
-  else {
-    x = cam.x();
-    y = cam.y();
+  auto t = cam.z() / dir.z();
+  [[maybe_unused]] auto x = cam.x() + dir.x() * t;
+  [[maybe_unused]] auto y = cam.y() + dir.y() * t;
+
+  auto mx = std::abs(static_cast<ssize_t>(x)) % 100 < 50;
+  auto my = std::abs(static_cast<ssize_t>(y)) % 100 < 50;
+
+  if (mx == my)
+  {
+    return Color(255, 255, 255);
   }
 
-  ssize_t xm = x & 1;
-  ssize_t ym = y & 1;
-
-  if ( xm == ym )
-    return Color( 255, 255, 255 );
   return Color( 0, 0, 0 );
 }
 
@@ -40,12 +37,15 @@ namespace Caster {
 Color raycast( const std::vector<EntityUPtr> &entities, size_t x, size_t z,
                const Screen &screen )
 {
-  auto dx = x - static_cast<FPType>( screen.width() ) / 2;
-  auto dy = static_cast<FPType>( 100 );
-  auto dz = z - static_cast<FPType>( screen.height() ) / 2;
+  auto wf = static_cast<FPType>(screen.width());
+  auto hf = static_cast<FPType>(screen.height());
+
+  auto dx = x - wf / 2;
+  auto dy = static_cast<FPType>( hf / 2 );
+  auto dz = z - hf / 2;
   Position dir( dx, dy, dz );
   dir.resize( 1 );
 
-  return s_cast( entities, Position( 0, 0, 5 ), dir );
+  return s_cast( entities, Position( 0, 0, hf / 2), dir );
 }
 } // namespace Caster

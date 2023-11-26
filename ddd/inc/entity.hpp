@@ -8,20 +8,16 @@
 class Entity {
 public:
   Entity( Color color, FPType x, FPType y, FPType z )
-      : m_color( color ), m_x( x ), m_y( y ), m_z( z )
+      : m_color( color ), m_pos( x, y, z )
   {
   }
   virtual ~Entity() {}
   virtual bool collides( const Position &cam, const Position &dir ) const = 0;
   Color color() const { return m_color; };
-  FPType x() const { return m_x; }
-  FPType y() const { return m_y; }
-  FPType z() const { return m_z; }
+  Position pos() const { return m_pos; }
 
 private:
   Color m_color;
-  FPType m_x;
-  FPType m_y;
-  FPType m_z;
+  Position m_pos;
 };
 using EntityUPtr = std::unique_ptr<Entity>;

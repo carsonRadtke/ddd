@@ -10,11 +10,10 @@ Sphere::Sphere( Color c, FPType x, FPType y, FPType z, FPType r )
 bool Sphere::collides( [[maybe_unused]] const Position &cam,
                        [[maybe_unused]] const Position &dir ) const
 {
-  Position self( x(), y(), z() );
-  Position dist = cam - self;
+  Position dist = cam - pos();
 
   float theta_s = std::tan( m_r / dist.magnitude() );
-  float theta_d = std::acos( self.dot( dir ) / self.magnitude() );
+  float theta_d = std::acos( pos().dot( dir ) / pos().magnitude() );
 
   return std::abs( theta_d ) <= std::abs( theta_s );
 }

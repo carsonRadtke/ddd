@@ -13,7 +13,7 @@
 static int ddd_main()
 {
   auto sph =
-      std::make_unique<Sphere>( Sphere( Color( 255, 0, 0 ), 0, 100, 0, 100 ) );
+      std::make_unique<Sphere>( Sphere( Color( 255, 0, 0 ), 0, 10, 5, 1 ) );
   std::vector<EntityUPtr> entities{};
   entities.push_back( std::move( sph ) );
 
