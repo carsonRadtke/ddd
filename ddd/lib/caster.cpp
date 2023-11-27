@@ -1,13 +1,15 @@
 #include "caster.hpp"
-#include "types.hpp"
 #include "color.hpp"
+#include "types.hpp"
 
-static Color s_cast_nocollision( [[maybe_unused]] const Position &cam,
-                                 const Position &dir )
+static Color s_cast( const std::vector<EntityUPtr> &entities,
+                     const Position &cam, const Position &dir, size_t bounces );
+static Color s_cast_nocollision( const std::vector<EntityUPtr> &entities, const Position &cam,
+                                 const Position & dir, size_t bounces )
 {
   auto dp = dir.dot( Position( 0, 0, 1 ) );
   if ( dp <= 0 )
-    return Color( 0, 0, 255 );
+    return Color( 50, 50, 50 );
 
   auto t = cam.z() / dir.z();
   [[maybe_unused]] auto x = cam.x() + dir.x() * t;
@@ -16,26 +18,28 @@ static Color s_cast_nocollision( [[maybe_unused]] const Position &cam,
   auto mx = std::abs( static_cast<ssize_t>( x ) ) % 100 < 50;
   auto my = std::abs( static_cast<ssize_t>( y ) ) % 100 < 50;
 
-  if ( mx == my ) {
-    return Color( 255, 255, 255 );
-  }
-
-  return Color( 0, 0, 0 );
+  Color color = mx == my
+    ? Color(255, 255, 255)
+    : Color(0, 0, 0);
+  return bounces == 0
+    ? color
+    : color + s_cast(entities, cam, dir, --bounces);
 }
 
 static Color s_cast( const std::vector<EntityUPtr> &entities,
-                     const Position &cam, const Position &dir,
-                     size_t bounces )
+                     const Position &cam, const Position &dir, size_t bounces )
 {
   for ( const auto &e : entities ) {
-    if ( e->collides( cam, dir ) )
-    {
+    if ( e->collides( cam, dir ) ) {
       Color entityColor = e->color();
-      if (bounces == 0) return entityColor;
-      return entityColor * 0.9;
+      if ( bounces == 0 )
+        return entityColor;
+      auto [ coll_pos, coll_norm ] = e->collision_info( cam, dir );
+      return entityColor +
+             s_cast( entities, coll_pos, coll_norm, --bounces ) * 0.75;
     }
   }
-  return s_cast_nocollision( cam, dir );
+  return s_cast_nocollision( entities, cam, dir, bounces );
 };
 
 namespace Caster {

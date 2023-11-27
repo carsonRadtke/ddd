@@ -1,13 +1,23 @@
 #include "color.hpp"
 
-Color::Color() : m_red(0), m_green(0), m_blue(0) {}
-Color::Color(uint8_t red, uint8_t green, uint8_t blue) : m_red(red), m_green(green), m_blue(blue) {}
+Color::Color() : m_red( 0 ), m_green( 0 ), m_blue( 0 ) {}
+Color::Color( uint8_t red, uint8_t green, uint8_t blue )
+    : m_red( red ), m_green( green ), m_blue( blue )
+{
+}
 
-Color Color::operator*(FPType frac) const{
-  auto r = static_cast<uint8_t>(frac * m_red);
-  auto g = static_cast<uint8_t>(frac * m_green);
-  auto b = static_cast<uint8_t>(frac * m_blue);
+Color Color::operator*( FPType frac ) const
+{
+  auto r = static_cast<uint8_t>( frac * m_red );
+  auto g = static_cast<uint8_t>( frac * m_green );
+  auto b = static_cast<uint8_t>( frac * m_blue );
   return Color( r, g, b );
+}
+
+Color Color::operator+( const Color &other ) const
+{
+  return Color( m_red / 2 + other.red() / 2, m_green / 2 + other.green() / 2,
+                m_blue / 2 + other.blue() / 2 );
 }
 
 std::tuple<uint8_t, uint8_t, uint8_t> Color::as_tuple() const
