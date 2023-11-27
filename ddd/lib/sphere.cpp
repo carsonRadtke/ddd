@@ -20,7 +20,9 @@ bool Sphere::collides( [[maybe_unused]] const Position &cam,
 }
 
 std::pair<Position, Position>
-Sphere::collision_info( [[maybe_unused]] const Position &com, [[maybe_unused]] const Position &dir ) const {
+Sphere::collision_info( [[maybe_unused]] const Position &com,
+                        [[maybe_unused]] const Position &dir ) const
+{
   return { com, dir };
 }
 

@@ -4,8 +4,9 @@
 
 static Color s_cast( const std::vector<EntityUPtr> &entities,
                      const Position &cam, const Position &dir, size_t bounces );
-static Color s_cast_nocollision( const std::vector<EntityUPtr> &entities, const Position &cam,
-                                 const Position & dir, size_t bounces )
+static Color s_cast_nocollision( const std::vector<EntityUPtr> &entities,
+                                 const Position &cam, const Position &dir,
+                                 size_t bounces )
 {
   auto dp = dir.dot( Position( 0, 0, 1 ) );
   if ( dp <= 0 )
@@ -18,12 +19,8 @@ static Color s_cast_nocollision( const std::vector<EntityUPtr> &entities, const 
   auto mx = std::abs( static_cast<ssize_t>( x ) ) % 100 < 50;
   auto my = std::abs( static_cast<ssize_t>( y ) ) % 100 < 50;
 
-  Color color = mx == my
-    ? Color(255, 255, 255)
-    : Color(0, 0, 0);
-  return bounces == 0
-    ? color
-    : color + s_cast(entities, cam, dir, --bounces);
+  Color color = mx == my ? Color( 255, 255, 255 ) : Color( 0, 0, 0 );
+  return bounces == 0 ? color : color + s_cast( entities, cam, dir, --bounces );
 }
 
 static Color s_cast( const std::vector<EntityUPtr> &entities,
