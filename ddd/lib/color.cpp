@@ -1,6 +1,7 @@
 #include "color.hpp"
 
 Color::Color() : m_red( 0 ), m_green( 0 ), m_blue( 0 ) {}
+
 Color::Color( uint8_t red, uint8_t green, uint8_t blue )
     : m_red( red ), m_green( green ), m_blue( blue )
 {
@@ -14,7 +15,7 @@ Color Color::operator*( FPType frac ) const
   return Color( r, g, b );
 }
 
-Color Color::operator+( const Color &other ) const
+Color Color::operator+( const Color & other ) const
 {
   return Color( m_red / 2 + other.red() / 2, m_green / 2 + other.green() / 2,
                 m_blue / 2 + other.blue() / 2 );
@@ -26,5 +27,7 @@ std::tuple<uint8_t, uint8_t, uint8_t> Color::as_tuple() const
 }
 
 uint8_t Color::red() const { return m_red; }
+
 uint8_t Color::green() const { return m_green; }
+
 uint8_t Color::blue() const { return m_blue; }

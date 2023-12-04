@@ -14,7 +14,7 @@ size_t Screen::height() const { return m_height; }
 
 size_t Screen::pixels() const { return m_width * m_height; }
 
-Color &Screen::operator[]( size_t idx ) { return m_raster[ idx ]; }
+Color & Screen::operator[]( size_t idx ) { return m_raster[idx]; }
 
 Screen::~Screen() { save(); }
 
@@ -24,8 +24,9 @@ void Screen::save() const
   std::cout << m_width << " " << m_height << "\n";
   std::cout << UINT8_MAX << "\n";
   int counter = 0;
-  for ( const auto &c : m_raster ) {
-    auto [ r, g, b ] = c.as_tuple();
+  for ( const auto & c : m_raster )
+  {
+    auto [r, g, b] = c.as_tuple();
     std::cout << static_cast<int>( r ) << " " << static_cast<int>( g ) << " "
               << static_cast<int>( b ) << "\t";
     counter++;
@@ -35,11 +36,13 @@ void Screen::save() const
   }
 }
 
-void Screen::render( const std::vector<EntityUPtr> &entities )
+void Screen::render( const std::vector<EntityUPtr> & entities )
 {
-  for ( size_t h = 0; h < m_height; h++ ) {
-    for ( size_t w = 0; w < m_width; w++ ) {
-      m_raster[ h * m_width + w ] = Caster::raycast( entities, w, h, *this );
+  for ( size_t h = 0; h < m_height; h++ )
+  {
+    for ( size_t w = 0; w < m_width; w++ )
+    {
+      m_raster[h * m_width + w] = Caster::raycast( entities, w, h, *this );
     }
   }
 }

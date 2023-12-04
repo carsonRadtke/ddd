@@ -3,10 +3,11 @@
 #include "entity.hpp"
 #include "types.hpp"
 
-struct Box : Entity {
+struct Box : Entity
+{
   Box( Color c, FPType x, FPType y, FPType z, FPType b, FPType w, FPType h );
-  bool collides( [[maybe_unused]] const Position &cam,
-                 [[maybe_unused]] const Position &dir ) const;
+  bool collides( [[maybe_unused]] const Position & cam,
+                 [[maybe_unused]] const Position & dir ) const;
   FPType base() const;
   FPType width() const;
   FPType height() const;

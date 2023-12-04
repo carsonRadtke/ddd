@@ -9,7 +9,7 @@
 #include "sphere.hpp"
 #include "types.hpp"
 
-static void init_scene( std::vector<EntityUPtr> &entities )
+static void init_scene( std::vector<EntityUPtr> & entities )
 {
   auto sph1 = std::make_unique<Sphere>(
       Sphere( Color( 0, 255, 255 ), 0, 500, 10, 50 ) );
@@ -33,7 +33,7 @@ static int ddd_main()
   return 0;
 }
 
-int main( [[maybe_unused]] int argc, [[maybe_unused]] const char *argv[] )
+int main( [[maybe_unused]] int argc, [[maybe_unused]] const char * argv[] )
 {
   return ddd_main();
 }

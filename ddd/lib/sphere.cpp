@@ -8,8 +8,8 @@ Sphere::Sphere( Color c, FPType x, FPType y, FPType z, FPType r )
 {
 }
 
-bool Sphere::collides( [[maybe_unused]] const Position &cam,
-                       [[maybe_unused]] const Position &dir ) const
+bool Sphere::collides( [[maybe_unused]] const Position & cam,
+                       [[maybe_unused]] const Position & dir ) const
 {
   Position dist = pos() - cam;
 
@@ -20,8 +20,8 @@ bool Sphere::collides( [[maybe_unused]] const Position &cam,
 }
 
 std::pair<Position, Position>
-Sphere::collision_info( [[maybe_unused]] const Position &com,
-                        [[maybe_unused]] const Position &dir ) const
+Sphere::collision_info( [[maybe_unused]] const Position & com,
+                        [[maybe_unused]] const Position & dir ) const
 {
   return { com, dir };
 }
